@@ -1,22 +1,36 @@
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { Card } from "@mui/material";
+import Ownership from "../pages/Dashboard"
 
-interface Stockholder {
-  firstName: string;
-  lastName: string;
-  participation: number;
+// interface Stockholder {
+//   id: number;
+//   name: string;
+// }
+
+interface Enterprise {
+  id: number;
+  name: string;
+}
+
+interface Ownership {
+  id: number;
+  stockholder: number;
+  stockholder_name: string;
+  enterprise: Enterprise;
+  enterprise_name: string;
+  percentage: number;
 }
 
 interface Props {
-  data: Stockholder[];
+  data: Ownership[];
 }
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
 
 export default function PieChartComponent({ data }: Props) {
   const chartData = data.map((p, index) => ({
-    name: `${p.firstName} ${p.lastName}`,
-    value: p.participation,
+    name: `${p.stockholder_name}`,
+    value: p.percentage,
     color: COLORS[index % COLORS.length],
   }));
 
