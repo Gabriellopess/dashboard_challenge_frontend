@@ -1,4 +1,4 @@
-import { Box, CssBaseline, Toolbar } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import Sidebar from "./components/Sidebar";
 import { Outlet } from "react-router-dom";
 
