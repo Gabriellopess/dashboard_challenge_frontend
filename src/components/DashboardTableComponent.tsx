@@ -26,13 +26,20 @@ export default function DashboardTable({ columns, data }: Props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((holding, index) => (
+          {data.length === 0 ? (
+            <TableRow>
+                <TableCell colSpan={columns.length + 1} sx={{ textAlign: "center" }}>
+                    No data found
+                </TableCell>
+            </TableRow>
+          ) : (
+          data.map((holding, index) => (
             <TableRow key={index}>
               <TableCell sx={{ textAlign: "center" }}>{holding.stockholder_name}</TableCell>
               <TableCell sx={{ textAlign: "center" }}>{holding.enterprise_name}</TableCell>
               <TableCell sx={{ textAlign: "center" }}>{holding.percentage}%</TableCell>
             </TableRow>
-          ))}
+          )))}
         </TableBody>
       </Table>
     </TableContainer>
