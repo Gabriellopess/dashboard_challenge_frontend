@@ -38,7 +38,6 @@ export default function Dashboard() {
   const [selectedEnterprise, setSelectedEnterprise] = useState<Enterprise | null>(null);
 
   const filteredOwnerships = ownerships.filter((o) => selectedStockholder?.id === o.stockholder);
-  // console.log("Filtered Ownerships: ", filteredOwnerships);
   const stockholderHoldings = selectedStockholder?.holdings_dict || {};
   const pieChartData = Object.entries(stockholderHoldings).map(([enterprise, percentage]) => ({
     id: enterprise,
@@ -47,28 +46,22 @@ export default function Dashboard() {
   }));
 
   const filteredOwnershipsEnterprise = ownerships.filter((o) => selectedEnterprise?.id === o.enterprise);
-  console.log("Filtered Ownerships Enterprise: ", filteredOwnershipsEnterprise);
   const enterpriseHoldings = selectedEnterprise?.stockholders_dict || {};
-  console.log("Enterprise Holdings: ", enterpriseHoldings);
   const pieChartDataEnterprise = Object.entries(enterpriseHoldings).map(([stockholder, percentage]) => ({
     id: stockholder,
     value: percentage,
     label: stockholder,
   }));
 
-
-  // Fetch stockholders and enterprises
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/holding/stockholders/").then((res) => setStockholders(res.data));
-    axios.get("http://127.0.0.1:8000/client/enterprises/").then((res) => setEnterprises(res.data));
-    axios.get("http://127.0.0.1:8000/holding/ownerships/").then((res) => setOwnerships(res.data));
+    axios.get("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/stockholders/").then((res) => setStockholders(res.data));
+    axios.get("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/client/enterprises/").then((res) => setEnterprises(res.data));
+    axios.get("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/ownerships/").then((res) => setOwnerships(res.data));
   }, []);
 
-  // console.log("Ownerships: ", ownerships);
 
-  // Handle Ownership Submission
   const handleAddOwnership = (newOwnership: { stockholder: number; enterprise: number; percentage: number }) => {
-    axios.post("http://127.0.0.1:8000/holding/ownerships/", {
+    axios.post("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/ownerships/", {
       stockholder: newOwnership.stockholder,
       enterprise: newOwnership.enterprise,
       percentage: newOwnership.percentage,
@@ -88,7 +81,6 @@ export default function Dashboard() {
   };
 
 const enterprisesNames = ownerships.map((o) => o.enterprise_name).filter((value, index, self) => self.indexOf(value) === index);
-// console.log("Enterprises Names: ", enterprisesNames);
 const enterprisesPercentages: { [key: string]: number } = {};
 
 ownerships.forEach((o) => {
@@ -98,10 +90,8 @@ ownerships.forEach((o) => {
   else
     enterprisesPercentages[o.enterprise_name] += Number(o.percentage);
 });
-// console.log("Enterprises Percentages: ", enterprisesPercentages);
 
 const percentageSeries = Object.keys(enterprisesPercentages).map((name) => (enterprisesPercentages[name]));
-// console.log("Percentage Series: ", percentageSeries);
 
   return (
     <Container>
@@ -173,7 +163,6 @@ const percentageSeries = Object.keys(enterprisesPercentages).map((name) => (ente
         </Select>
       </FormControl>
 
-      {/* Show table & chart only if a stockholder is selected */}
       {selectedStockholder && (
         <Grid container spacing={3} sx={{ mt: 4 }}>
           <Grid item xs={12} md={6}>
@@ -221,7 +210,6 @@ const percentageSeries = Object.keys(enterprisesPercentages).map((name) => (ente
           <InputLabel>Select Enterprise</InputLabel>
           <Select value={selectedEnterprise?.id || ''} onChange={(e) => {
             const enterprise = enterprises.find(s => s.id === Number(e.target.value)) || null;
-            console.log("Selected enterprise: ", enterprise);
             setSelectedEnterprise(enterprise);
           }}>
             <MenuItem value=''>
