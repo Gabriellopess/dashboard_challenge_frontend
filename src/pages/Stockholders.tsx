@@ -19,9 +19,8 @@ export default function Stockholders() {
   const [selectedStockholder, setSelectedStockholder] = useState<Stockholder | null>(null);
   const [newStockholder, setNewStockholder] = useState<Stockholder>({ id: 0, name: "", email: "" });
 
-  // Fetch stockholders
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/holding/stockholders/")
+    axios.get("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/stockholders/")
       .then(response => {
         const transformedData = response.data.map((stockholder: any) => ({
             ...stockholder,
@@ -30,12 +29,10 @@ export default function Stockholders() {
                 : []
         }));
         setStockholders(transformedData);
-        // setStockholders(response.data)
       })
       .catch(error => console.error("Error fetching stockholders:", error));
   }, []);
 
-  // Handle modal open/close
   const handleOpen = (stockholder?: Stockholder) => {
     setSelectedStockholder(stockholder || null);
     setOpenModal(true);
@@ -51,17 +48,16 @@ export default function Stockholders() {
     }
   };
 
-  // Handle create/update
   const handleSubmit = () => {
     if (selectedStockholder) {
-      axios.put(`http://127.0.0.1:8000/holding/stockholders/${selectedStockholder.id}/`, selectedStockholder)
+      axios.put(`https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/stockholders/${selectedStockholder.id}/`, selectedStockholder)
         .then(() => {
           setStockholders(stockholders.map(e => e.id === selectedStockholder.id ? selectedStockholder : e));
           handleClose();
         })
         .catch(error => console.error("Error updating stockholder:", error));
     } else {
-      axios.post("http://127.0.0.1:8000/holding/stockholders/", newStockholder)
+      axios.post("https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/stockholders/", newStockholder)
         .then(response => {
           setStockholders([...stockholders, response.data]);
           handleClose();
@@ -71,7 +67,6 @@ export default function Stockholders() {
     }
   };
 
-  // Handle delete
   const handleDelete = (stockholder: Stockholder) => {
     Swal.fire({
         title: `Delete ${stockholder.name} Stockholder?`,
@@ -83,7 +78,7 @@ export default function Stockholders() {
       }).then((result) => {
         if (result.isConfirmed) {
           Swal.fire("Deleted!", "", "success");
-          axios.delete(`http://127.0.0.1:8000/holding/stockholders/${stockholder.id}/`)
+          axios.delete(`https://oncase-dashboard-50794a3b8eb0.herokuapp.com/holding/stockholders/${stockholder.id}/`)
             .then(() => {
                 setStockholders(stockholders.filter(e => e.id !== stockholder.id));
             })

@@ -15,7 +15,6 @@ interface Props {
 }
 
 export default function DashboardTable({ columns, data }: Props) {
-  console.log("Dados: ", data);
   return (
     <TableContainer component={Paper} sx={{ maxHeight: 320 }}>
       <Table stickyHeader >

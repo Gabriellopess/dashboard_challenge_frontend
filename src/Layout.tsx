@@ -21,7 +21,6 @@ export default function Layout() {
         color: "black"
       }
       }>
-        {/* <Toolbar /> */}
         <Outlet />
       </Box>
     </Box>
